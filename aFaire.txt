@@ -1,0 +1,8 @@
+1. Cacher les predictions a ceux qui n'ent ont pas fait une
+2. Ajuster page ranking sur phone
+3. Graphe de ranking
+4. Ajouter/Confirmer matchs directement sur plateforme
+5.1 Griser matchs deja joues
+5.2 Fermer matchs deja joues
+6. Plusieurs pages de tournois
+7. Resultat des matchs
