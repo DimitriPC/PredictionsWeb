@@ -1,0 +1,26 @@
+services:
+
+  web:
+    build: .
+    container_name: predictionApp
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://dimitri:4939@db:5432/mydb
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: dimitri
+      POSTGRES_PASSWORD: 4939
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
