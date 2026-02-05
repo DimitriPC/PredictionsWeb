@@ -2,6 +2,7 @@ from HelloFlask import app
 from flask import Flask, render_template, url_for, redirect, request, session
 from flask_bcrypt import bcrypt
 import sqlite3, json, os
+from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime
 
@@ -9,6 +10,7 @@ THIS_FOLDER = Path(__file__).parent.resolve()
 absolute_path = THIS_FOLDER / "can2025DB.db"
 
 app.secret_key = "allo"
+
 
 @app.route('/', methods=["POST", "GET"])
 @app.route('/#', methods=["POST", "GET"])
