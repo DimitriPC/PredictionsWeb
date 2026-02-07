@@ -12,6 +12,8 @@ absolute_path = THIS_FOLDER / "can2025DB.db"
 app.secret_key = "allo"
 
 
+
+
 @app.route('/', methods=["POST", "GET"])
 @app.route('/#', methods=["POST", "GET"])
 @app.route('/login', methods=["POST", "GET"])

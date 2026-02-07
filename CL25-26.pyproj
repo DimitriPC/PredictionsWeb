@@ -22,8 +22,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="databaseAccess.py" />
-    <Compile Include="HelloFlask\formTest.py" />
+    <Compile Include="HelloFlask\routes.py" />
+    <Compile Include="HelloFlask\tables.py" />
     <Compile Include="HelloFlask\__init__.py" />
     <Compile Include="runserver.py" />
   </ItemGroup>
