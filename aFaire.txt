@@ -6,3 +6,4 @@
 5.2 Fermer matchs deja joues
 6. Plusieurs pages de tournois
 7. Resultat des matchs
+8. Terminologie matchs (PL1STLEG, FAC1STLEG, etc)

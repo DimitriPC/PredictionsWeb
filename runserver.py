@@ -1,6 +1,9 @@
 import os
-from HelloFlask import app    # Imports the code from HelloFlask/__init__.py       
+from HelloFlask import app, db    # Imports the code from HelloFlask/__init__.py       
 from flask import Flask
+from flask_migrate import Migrate
+
+migrate = Migrate(app, db)
 
 
 if __name__ == '__main__':

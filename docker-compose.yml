@@ -8,7 +8,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      DATABASE_URL: postgres://dimitri:4939@db:5432/mydb
+      DATABASE_URL: postgresql://dimitri:4939@db:5432/mydb
     restart: unless-stopped
 
   db:
@@ -19,6 +19,8 @@ services:
       POSTGRES_DB: mydb
       POSTGRES_USER: dimitri
       POSTGRES_PASSWORD: 4939
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 

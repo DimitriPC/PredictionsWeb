@@ -2,14 +2,9 @@ from typing import List
 from sqlalchemy import ForeignKey,ForeignKeyConstraint, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
-from HelloFlask import app
+from HelloFlask import app, db
 import os
 from datetime import date, time
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
 
 
 class Individu(db.Model):
