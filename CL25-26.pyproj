@@ -25,6 +25,8 @@
     <Compile Include="HelloFlask\routes.py" />
     <Compile Include="HelloFlask\tables.py" />
     <Compile Include="HelloFlask\__init__.py" />
+    <Compile Include="migrations\env.py" />
+    <Compile Include="migrations\versions\f5077d4576aa_initial_migration.py" />
     <Compile Include="runserver.py" />
   </ItemGroup>
   <ItemGroup>
@@ -33,10 +35,16 @@
     <Folder Include="HelloFlask\static\images\" />
     <Folder Include="HelloFlask\static\images\CAN2025\" />
     <Folder Include="HelloFlask\templates\" />
+    <Folder Include="migrations\" />
+    <Folder Include="migrations\versions\" />
+    <Folder Include="migrations\versions\__pycache__\" />
+    <Folder Include="migrations\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="aFaire.txt" />
+    <Content Include="docker-compose.yml" />
+    <Content Include="Dockerfile" />
     <Content Include="HelloFlask\static\images\CAN2025\MLITUN8TH.png" />
     <Content Include="HelloFlask\static\images\CAN2025\SENSDN8TH.png" />
     <Content Include="HelloFlask\templates\confirmation.html" />
@@ -48,6 +56,11 @@
     <Content Include="HelloFlask\templates\ranking.html" />
     <Content Include="HelloFlask\templates\register.html" />
     <Content Include="HelloFlask\templates\resultat.html" />
+    <Content Include="migrations\alembic.ini" />
+    <Content Include="migrations\README" />
+    <Content Include="migrations\script.py.mako" />
+    <Content Include="migrations\versions\__pycache__\f5077d4576aa_initial_migration.cpython-314.pyc" />
+    <Content Include="migrations\__pycache__\env.cpython-314.pyc" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

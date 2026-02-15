@@ -11,7 +11,7 @@ class Individu(db.Model):
     __tablename__ = "individu"
 
     nomComplet: Mapped[str] = mapped_column(primary_key=True)
-    password: Mapped[str]
+    password: Mapped[str] = mapped_column(nullable=False)
 
     predictions: Mapped[List["Prediction"]] = relationship(back_populates="individu", 
                                                            cascade="all, delete-orphan",
