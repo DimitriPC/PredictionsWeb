@@ -5,7 +5,10 @@ import sqlite3, json, os
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime
-from .tables import Individu, Match, Prediction
+from .tables import Individu, Match, Prediction, Equipe
+from sqlalchemy import select, insert, func, Integer
+from random import randint, choice
+import sys
 
 THIS_FOLDER = Path(__file__).parent.resolve()
 absolute_path = THIS_FOLDER / "can2025DB.db"
@@ -20,7 +23,8 @@ def login():
         username = request.form["username"]
         enteredPassword = request.form["password"].encode("utf-8")
 
-        user = Individu.query.filter_by(nomComplet=username).first()
+        stmt = select(Individu).where(Individu.nomComplet == username)
+        user = db.session.scalars(stmt).first()
 
         # account does not exist
         if not user:
@@ -37,11 +41,8 @@ def login():
             )
 
         # check password
-        print(user.password)
-        print("\n")
-        print(enteredPassword)
         if bcrypt.checkpw(enteredPassword, user.password.encode("utf-8")):
-            session["username"] = username
+            session["userId"] = user.id
             return redirect(url_for("prediction"))
 
         return render_template(
@@ -77,7 +78,7 @@ def register():
             user.password = hashed
             db.session.commit()
 
-            session["username"] = username
+            session["userId"] = user.id
             return redirect(url_for("prediction"))
 
         # User does not exist → create new one
@@ -92,7 +93,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        session["username"] = new_user.nomComplet
+        session["userId"] = new_user.id
         return redirect(url_for("prediction"))
 
     return render_template("register.html")
@@ -100,77 +101,97 @@ def register():
 
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
-    return "Hello" 
-
-
-
-@app.route('/prediction2', methods=['GET', 'POST'])
-def prediction2():
     if request.method == "POST":
 
-        username = session["username"]
-        matchPK = request.form["matchs"]
+        userId = int(session["userId"])
+        matchID = int(request.form["matchs"])
         resultat = request.form["resultat"]
-        scoreTeam1 = request.form["buts1"]        
-        scoreTeam2 = request.form["buts2"]
+        scoreTeam1 = int(request.form["buts1"])     
+        scoreTeam2 = int(request.form["buts2"])
         autresPred = request.form["autres"]
 
-        team1 = matchPK.split()[0]
-        team2 = matchPK.split()[2]
-        stadeCompetUnformat = matchPK.split()[3]
-        stadeCompet = stadeCompetUnformat.replace("(", "").replace(")", "")
+        pred = Prediction(individu_id=userId, idMatch=matchID, resultat=resultat, scoreTeam1=scoreTeam1, scoreTeam2=scoreTeam2, autres=autresPred, datePrediction=datetime.now())
+        db.session.add(pred)
+        db.session.commit()
 
-        now = datetime.now()
-        time = now.strftime("%Y-%m-%d %H:%M:%S")
-
-        with sqlite3.connect(absolute_path, timeout=2) as con:
-            cur = con.cursor()
-
-        
-
-        data = (username, team1, team2, stadeCompet, resultat, scoreTeam1, scoreTeam2, autresPred, time)
-        sql = "INSERT INTO prediction(individu_nomComplet, equipe1, equipe2, stadeCompet, resultat, scoreTeam1, scoreTeam2, autres, time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        cur.execute(sql, data)
-        con.commit()
-        con.close()
-
+        #add notification to say prediction added
         return redirect(url_for("ranking"))
     else:
-        with sqlite3.connect(absolute_path, timeout=2) as con:
-            cur = con.cursor()
 
-        sqlStatement = 'Select equipe1, equipe2, stadeCompet from match;'
-        cur.execute(sqlStatement)
-        list = cur.fetchall()
-        formattedList = []
-        
-        for match in list:
-            equipe1 = match[0]
-            equipe2 = match[1]
-            stadeCompet = match[2]
-            fullString = equipe1 + " " + "vs" + " " + equipe2 + " " + "(" + stadeCompet + ")"
-            formattedList.append(fullString)
+        stmt = select(Match)
+        all_matches = db.session.scalars(stmt).all()
 
-        
-        return render_template("prediction.html", listRows=formattedList) 
+        pending = []
+        finished = []
+        for m in all_matches:
+            if m.dateMatch:
+
+                if m.dateMatch > datetime.now():
+                    pending.append(m)
+                else:
+                    finished.append(m)
+            else:
+                pending.append(m)  # no date = predictible
+
+        return render_template("card.html", pending_matches=pending, finished_matches=finished)
+
+@app.route('/prediction/<matchId>', methods=['GET', 'POST'])
+def prediction_match(matchId):
+    match = db.session.get(Match, matchId)
+    teamHome = db.session.get(Equipe, match.equipeHomeId)
+    teamAway = db.session.get(Equipe, match.equipeAwayId)
+    return render_template("prediction.html", match=match)
+
 
 @app.route('/ranking', methods=['GET', 'POST'])
 def ranking():
-    if request.method == "POST":
-        return render_template("vide.html")
-    else:
-        with sqlite3.connect(absolute_path) as con:
-            cur = con.cursor()
+    
+    stmt = (
+        select(
+            Prediction.individu_id,
+            func.count().label("nbr_predictions"),
+            func.sum(func.cast(Prediction.winScore, Integer)).label("nbr_winScore"),
+            func.sum(func.cast(Prediction.winOutcome, Integer)).label("nbr_winOutcome")
+        )
+        .group_by(Prediction.individu_id)
+    )
+    ranking = db.session.execute(stmt).all()
+    print(ranking, file=sys.stderr)
 
-        sqlStatement = 'SELECT individu_nomComplet AS nom, COUNT(*) AS totalPlayed,SUM(winResultat = 1) AS winResultat,SUM(winScore = 1) AS winScore FROM prediction GROUP BY individu_nomComplet ORDER BY winResultat DESC, winScore DESC;'
+    return "ranking page"
 
-        cur.execute(sqlStatement)
-        list = cur.fetchall()
 
-        return render_template("ranking.html", listRows=list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/confirmation', methods=['GET', 'POST'])
 def confirmation():
+    #make prediction visible or invisible only for admin on predictions page
     if request.method == "POST":
 
         matchPK = request.form["matchs"]
@@ -247,21 +268,8 @@ def resultat():
     listPredictions = cur.fetchall()
 
     return render_template("resultat.html", listRows=list, predRows=listPredictions)
-    
-
-def checkPasswordExists(cur, gamertag):
-    if cur.execute("SELECT password from individu where gamertag = ?", (gamertag, )).fetchone()[0]:
-        return True
-    else:
-        return False
-
-def getPassword(cur, gamertag):
-    return cur.execute("SELECT password from individu where gamertag = ?", (gamertag, )).fetchone()[0]
 
 
-@app.route("/<var>")
-def afficher(var):
-    return f"<h1>{var}<h1>"
-
+ 
 
 

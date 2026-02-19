@@ -12,6 +12,7 @@
     <Name>PredictionsCAN2025</Name>
     <RootNamespace>PredictionsCAN2025</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,10 +24,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HelloFlask\routes.py" />
+    <Compile Include="HelloFlask\seed.py" />
     <Compile Include="HelloFlask\tables.py" />
     <Compile Include="HelloFlask\__init__.py" />
     <Compile Include="migrations\env.py" />
-    <Compile Include="migrations\versions\f5077d4576aa_initial_migration.py" />
+    <Compile Include="migrations\versions\b92f2d023ce5_initial_schema_with_tables.py" />
     <Compile Include="runserver.py" />
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +36,9 @@
     <Folder Include="HelloFlask\static\" />
     <Folder Include="HelloFlask\static\images\" />
     <Folder Include="HelloFlask\static\images\CAN2025\" />
+    <Folder Include="HelloFlask\static\images\CL25-26\" />
     <Folder Include="HelloFlask\templates\" />
+    <Folder Include="migrations\" />
     <Folder Include="migrations\" />
     <Folder Include="migrations\versions\" />
     <Folder Include="migrations\versions\__pycache__\" />
@@ -47,6 +51,57 @@
     <Content Include="Dockerfile" />
     <Content Include="HelloFlask\static\images\CAN2025\MLITUN8TH.png" />
     <Content Include="HelloFlask\static\images\CAN2025\SENSDN8TH.png" />
+    <Content Include="HelloFlask\static\images\CL25-26\azerbaijan_qarabag.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\belgium_club-brugge.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\belgium_union-saint-gilloise.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\cyprus_pafos.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\czech-republic_slavia-praha.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\denmark_copenhagen.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_arsenal.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_chelsea.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_liverpool.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_manchester-city.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_manchester-united.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_newcastle.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\england_tottenham.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\france_as-monaco.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\france_marseille.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\france_paris-saint-germain.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\germany_bayer-leverkusen.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\germany_bayern-munchen.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\germany_borussia-dortmund.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\germany_eintracht-frankfurt.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\greece_olympiacos.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_atalanta.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_inter.football-logos.cc - Copy %282%29.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_inter.football-logos.cc - Copy - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_inter.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_inter.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_juventus.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_juventus.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_napoli.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\italy_napoli.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\kazakhstan_kairat.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\kazakhstan_kairat.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\netherlands_ajax.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\netherlands_ajax.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\netherlands_psv.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\netherlands_psv.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\norway_bodo-glimt.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\norway_bodo-glimt.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\portugal_benfica.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\portugal_benfica.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\portugal_sporting-cp.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\portugal_sporting-cp.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_athletic-club.football-logos.cc - Copy.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_athletic-club.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_atletico-madrid.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_barcelona.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_real-madrid.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\spain_villarreal.football-logos.cc.svg" />
+    <Content Include="HelloFlask\static\images\CL25-26\turkey_galatasaray.football-logos.cc.svg" />
+    <Content Include="HelloFlask\templates\base.html" />
+    <Content Include="HelloFlask\templates\card.html" />
     <Content Include="HelloFlask\templates\confirmation.html" />
     <Content Include="HelloFlask\templates\failedLogin.html" />
     <Content Include="HelloFlask\templates\failedRegister.html" />
@@ -59,8 +114,6 @@
     <Content Include="migrations\alembic.ini" />
     <Content Include="migrations\README" />
     <Content Include="migrations\script.py.mako" />
-    <Content Include="migrations\versions\__pycache__\f5077d4576aa_initial_migration.cpython-314.pyc" />
-    <Content Include="migrations\__pycache__\env.cpython-314.pyc" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

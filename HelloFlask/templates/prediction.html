@@ -30,14 +30,34 @@
             <h1 class="card-title">Predictions CAN 2025</h1>
             <p class="card-text">Rentrez votre prediction</p>
         </div>
-    </div>    
+    </div>
     <br />
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Choix du match</h5>
-            <p class="card-text">Choisir le match a predire</p>
-            <select id="matchs" name="matchs">
-            </select>
+
+            <div class="row align-items-center">
+                <div class="col-5 text-end">
+                    <img src="{{ url_for('static',
+                     filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
+                         alt="{{ match.equipeHome.name }}"
+                         style="height:60px;">
+                </div>
+
+                <div class="col-2 text-center">
+                    <div class="fw-bold">VS</div>
+                    <small>
+                        {{ match.dateMatch.strftime("%d %b %H:%M") if match.dateMatch else "" }}
+                    </small>
+                </div>
+
+                <div class="col-5 text-start">
+                    <img src="{{ url_for('static',
+                        filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
+                         alt="{{ match.equipeAway.name }}"
+                         style="height:60px;">
+                </div>
+            </div>
+
         </div>
     </div>
     <br />
@@ -88,22 +108,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </form>
-<script>
-
-        let myjson = {{ listRows | tojson | safe }}
-        renderDataInTheTable(myjson)
-
-
-        function renderDataInTheTable(todos) {
-        const mytable = document.getElementById("matchs");
-            todos.forEach(todo => {
-                let choice = document.createElement("option");
-                choice.value = todo;
-                choice.innerText = todo;
-                mytable.appendChild(choice);
-        });
-        }
-
-
-</script>
 {% endblock %}
