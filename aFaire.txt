@@ -8,3 +8,11 @@
 7. Resultat des matchs
 8. Terminologie matchs (PL1STLEG, FAC1STLEG, etc)
 9. Annuler predictions
+
+Legende de predictions couleur: 
+Aucun point: rouge
+Non joue fini: gris
+Non joue dispo: blanc
+Partie de points: vert clair
+Tous les points: vert fonce
+Joue: Contour noir

@@ -1,0 +1,141 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .match-card {
+        transition: transform .15s ease, box-shadow .15s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+        .match-card:hover {
+            transform: scale(1.015);
+            box-shadow: 0 10px 25px rgba(0,0,0,.25);
+        }
+</style>
+
+<h2 class="text-center mt-4 mb-3 text-white">Upcoming Matches</h2>
+
+<div class="container mt-4">
+
+    ```
+    <button class="btn btn-dark w-100 text-start mb-2"
+            data-bs-toggle="collapse"
+            data-bs-target="#pendingCollapse"
+            aria-expanded="true">
+        > To Predict
+    </button>
+
+    <div class="collapse show" id="pendingCollapse">
+
+        {% for match in pending_matches %}
+        <div class="card mb-3 match-card shadow-sm"
+             onclick="goToMatch({{ match.id }})">
+
+            <div class="card-body position-relative">
+
+                <div class="row align-items-center">
+                    <div class="col-5 text-end">
+                        <img src="{{ url_for('static',
+                    filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
+                             alt="{{ match.equipeHome.name }}"
+                             style="height:60px;">
+                    </div>
+
+                    <div class="col-2 text-center">
+                        <div class="fw-bold">VS</div>
+                        <small class="text-muted">
+                            {{ match.dateMatch.strftime("%d %b") if match.dateMatch else "" }}
+                            {{ match.heureMatch.strftime("%H:%M") if match.heureMatch else "" }}
+                        </small>
+                    </div>
+
+                    <div class="col-5 text-start">
+                        <img src="{{ url_for('static',
+                    filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
+                             alt="{{ match.equipeAway.name }}"
+                             style="height:60px;">
+                    </div>
+                </div>
+
+                <!-- Dropdown menu -->
+                <div class="dropdown position-absolute bottom-0 end-0 m-2">
+                    <button class="btn btn-sm btn-light"
+                            onclick="event.stopPropagation()"
+                            data-bs-toggle="dropdown">
+                        ⋮
+                    </button>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                               href="{{ url_for('predic_match', match_id=match.id) }}">
+                                Edit
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    ```
+
+</div>
+
+<div class="container mt-4">
+
+    ```
+    <button class="btn btn-secondary w-100 text-start mb-2"
+            data-bs-toggle="collapse"
+            data-bs-target="#finishedCollapse"
+            aria-expanded="false">
+        > Finished
+    </button>
+
+    <div class="collapse" id="finishedCollapse">
+
+        {% for match in finished_matches %}
+        <div class="card mb-3 bg-secondary text-white">
+            <div class="card-body">
+
+                <div class="row align-items-center">
+                    <div class="col-5 text-end">
+                        <img src="{{ url_for('static',
+                        filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
+                             alt="{{ match.equipeHome.name }}"
+                             style="height:60px;">
+                    </div>
+
+                    <div class="col-2 text-center">
+                        <div class="fw-bold">
+                            {{ match.scoreEquipe1 }} - {{ match.scoreEquipe2 }}
+                        </div>
+                    </div>
+
+                    <div class="col-5 text-start">
+                        <img src="{{ url_for('static',
+                        filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
+                             alt="{{ match.equipeAway.name }}"
+                             style="height:60px;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    ```
+
+</div>
+
+<script>
+    function goToMatch(id) {
+    window.location.href = "/prediction/" + id;
+    }
+</script>
+
+{% endblock %}

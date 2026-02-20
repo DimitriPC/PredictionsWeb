@@ -30,6 +30,25 @@
         }
 
     /* dropdown */
+    .menu-toggle {
+        display: none;
+    }
+
+    .menu-icon {
+        position: absolute;
+        bottom: 8px;
+        right: 10px;
+        font-size: 22px;
+        color: #6c757d;
+        padding: 4px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .menu-icon:hover {
+            background: rgba(0,0,0,.08);
+        }
+
     .card-dropdown {
         position: absolute;
         right: 10px;
@@ -37,8 +56,8 @@
         background: white;
         border-radius: 10px;
         box-shadow: 0 8px 18px rgba(0,0,0,.25);
-        display: none;
         min-width: 120px;
+        display: none;
         z-index: 10;
     }
 
@@ -53,9 +72,10 @@
                 background: #f1f1f1;
             }
 
-        .card-dropdown.show {
-            display: block;
-        }
+    /* MAGIC: checked checkbox shows menu */
+    .menu-toggle:checked + label + .card-dropdown {
+        display: block;
+    }
 </style>
 
 <h2 class="text-center mt-4 mb-3 text-white">Upcoming Matches</h2>
@@ -105,31 +125,14 @@
                     </div>
                 </div>
             </a>
-            <button class="card-menu-btn" onclick="toggleMenu(event, this)">⋮</button>
+            <input type="checkbox" id="menu{{ match.id }}" class="menu-toggle">
+
+            <label for="menu{{ match.id }}" class="menu-icon">⋮</label>
 
             <div class="card-dropdown">
-                <a href="{{ url_for('ranking') }}">Edit</a>
+                <a href="{{ url_for('modification', matchId=match.id) }}">Edit</a>
             </div>
-            <script>
-                function toggleMenu(event, btn) {
-                event.stopPropagation();
 
-                const menu = btn.nextElementSibling;
-
-                // close others
-                document.querySelectorAll(".card-dropdown").forEach(m => {
-                if (m !== menu) m.classList.remove("show");
-                });
-
-                menu.classList.toggle("show");
-                }
-
-                // close when clicking anywhere
-                document.addEventListener("click", function() {
-                document.querySelectorAll(".card-dropdown")
-                .forEach(m => m.classList.remove("show"));
-                });
-            </script>
             {% endfor %}
         </div>
 

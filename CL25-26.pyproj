@@ -35,7 +35,6 @@
     <Folder Include="HelloFlask\" />
     <Folder Include="HelloFlask\static\" />
     <Folder Include="HelloFlask\static\images\" />
-    <Folder Include="HelloFlask\static\images\CAN2025\" />
     <Folder Include="HelloFlask\static\images\CL25-26\" />
     <Folder Include="HelloFlask\templates\" />
     <Folder Include="migrations\" />
@@ -49,8 +48,6 @@
     <Content Include="aFaire.txt" />
     <Content Include="docker-compose.yml" />
     <Content Include="Dockerfile" />
-    <Content Include="HelloFlask\static\images\CAN2025\MLITUN8TH.png" />
-    <Content Include="HelloFlask\static\images\CAN2025\SENSDN8TH.png" />
     <Content Include="HelloFlask\static\images\CL25-26\azerbaijan_qarabag.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\belgium_club-brugge.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\belgium_union-saint-gilloise.football-logos.cc.svg" />
@@ -102,7 +99,9 @@
     <Content Include="HelloFlask\static\images\CL25-26\turkey_galatasaray.football-logos.cc.svg" />
     <Content Include="HelloFlask\templates\base.html" />
     <Content Include="HelloFlask\templates\card.html" />
-    <Content Include="HelloFlask\templates\confirmation.html" />
+    <Content Include="HelloFlask\templates\card2.html" />
+    <Content Include="HelloFlask\templates\card3.html" />
+    <Content Include="HelloFlask\templates\modification.html" />
     <Content Include="HelloFlask\templates\failedLogin.html" />
     <Content Include="HelloFlask\templates\failedRegister.html" />
     <Content Include="HelloFlask\templates\login.html" />

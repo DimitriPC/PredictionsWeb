@@ -7,6 +7,7 @@ from pathlib import Path
 from datetime import datetime
 from .tables import Individu, Match, Prediction, Equipe
 from sqlalchemy import select, insert, func, Integer
+from sqlalchemy.orm import joinedload
 from random import randint, choice
 import sys
 
@@ -118,7 +119,7 @@ def prediction():
         return redirect(url_for("ranking"))
     else:
 
-        stmt = select(Match)
+        stmt = select(Match).options(joinedload(Match.equipeHome), joinedload(Match.equipeAway))
         all_matches = db.session.scalars(stmt).all()
 
         pending = []
@@ -133,7 +134,7 @@ def prediction():
             else:
                 pending.append(m)  # no date = predictible
 
-        return render_template("card.html", pending_matches=pending, finished_matches=finished)
+        return render_template("card3.html", pending_matches=pending, finished_matches=finished)
 
 @app.route('/prediction/<matchId>', methods=['GET', 'POST'])
 def prediction_match(matchId):
@@ -141,7 +142,6 @@ def prediction_match(matchId):
     teamHome = db.session.get(Equipe, match.equipeHomeId)
     teamAway = db.session.get(Equipe, match.equipeAwayId)
     return render_template("prediction.html", match=match)
-
 
 @app.route('/ranking', methods=['GET', 'POST'])
 def ranking():
@@ -162,35 +162,8 @@ def ranking():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@app.route('/confirmation', methods=['GET', 'POST'])
-def confirmation():
+@app.route('/modification/<int:matchId>', methods=['GET', 'POST'])
+def modification(matchId):
     #make prediction visible or invisible only for admin on predictions page
     if request.method == "POST":
 
@@ -232,24 +205,23 @@ def confirmation():
         return redirect(url_for("ranking"))
 
     else:
-        with sqlite3.connect(absolute_path) as con:
-            cur = con.cursor()
+        match = db.session.get(Match, matchId)
+        return render_template("modification.html", match=match) 
+        
 
-        sqlStatement = 'Select equipe1, equipe2, stadeCompet from match;'
-        cur.execute(sqlStatement)
-        list = cur.fetchall()
-        formattedList = []
-        
-        for match in list:
-            equipe1 = match[0]
-            equipe2 = match[1]
-            stadeCompet = match[2]
-            fullString = equipe1 + " " + "vs" + " " + equipe2 + " " + "(" + stadeCompet + ")"
-            formattedList.append(fullString)
 
-        
-        return render_template("confirmation.html", listRows=formattedList) 
-        
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/resultat', methods=['GET', 'POST'])
 def resultat():

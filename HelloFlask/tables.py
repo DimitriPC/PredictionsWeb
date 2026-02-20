@@ -1,4 +1,4 @@
-from enum import auto
+from enum import auto, IntEnum
 from typing import List
 from sqlalchemy import ForeignKey,ForeignKeyConstraint, UniqueConstraint, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -28,7 +28,7 @@ class Match(db.Model):
     equipeAwayId: Mapped[int] = mapped_column(ForeignKey("equipe.id"), nullable=False)
     stadeCompet: Mapped[str] = mapped_column(nullable=False)
     dateMatch: Mapped[datetime | None]
-    resultat: Mapped[str | None]
+    resultat: Mapped[int | None]
     scoreEquipe1: Mapped[int | None]
     scoreEquipe2: Mapped[int | None]
     coteEquipe1: Mapped[Decimal | None] = mapped_column(Numeric(6,2))
@@ -56,7 +56,7 @@ class Prediction(db.Model):
     idMatch: Mapped[int] = mapped_column(ForeignKey("match.id", 
                                                     ondelete="CASCADE"),
                                          nullable=False)
-    resultatMatch: Mapped[str]
+    resultatMatch: Mapped[int]
     scoreTeam1: Mapped[int]
     scoreTeam2: Mapped[int]
     winScore: Mapped[bool | None]
