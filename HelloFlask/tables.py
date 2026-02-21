@@ -20,6 +20,11 @@ class Individu(db.Model):
                                                            cascade="all, delete-orphan",
                                                            passive_deletes=True)
 
+class Result(IntEnum):
+    DRAW = 0
+    HOME = 1
+    AWAY = 2
+
 class Match(db.Model):
     __tablename__ = "match"
 
@@ -28,7 +33,6 @@ class Match(db.Model):
     equipeAwayId: Mapped[int] = mapped_column(ForeignKey("equipe.id"), nullable=False)
     stadeCompet: Mapped[str] = mapped_column(nullable=False)
     dateMatch: Mapped[datetime | None]
-    resultat: Mapped[int | None]
     scoreEquipe1: Mapped[int | None]
     scoreEquipe2: Mapped[int | None]
     coteEquipe1: Mapped[Decimal | None] = mapped_column(Numeric(6,2))
@@ -45,6 +49,16 @@ class Match(db.Model):
     __table_args__ = (
         UniqueConstraint("equipeHomeId", "equipeAwayId", "stadeCompet"),
     )
+
+    @property
+    def result(self) -> Result | None:
+        if self.scoreEquipe1 is None or self.scoreEquipe2 is None:
+            return None
+        if self.scoreEquipe1 > self.scoreEquipe2:
+            return Result.HOME
+        if self.scoreEquipe1 < self.scoreEquipe2:
+            return Result.AWAY
+        return Result.DRAW
 
 class Prediction(db.Model):
     __tablename__ = "prediction"
@@ -82,3 +96,5 @@ class Equipe(db.Model):
                                                       foreign_keys="Match.equipeHomeId",)
     awayMatches: Mapped[List["Match"]] = relationship(back_populates="equipeAway",
                                                       foreign_keys="Match.equipeAwayId",)
+
+

@@ -1,0 +1,170 @@
+{% extends "navBar.html" %}
+{% block title %}Prediction{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #1f1f1f;
+        margin: 0;
+    }
+
+    /* page wrapper fills entire viewport */
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* content area takes remaining space under navbar and centers the container */
+    .page-content {
+        flex: 1; /* remaining space after navbar */
+        display: flex;
+        justify-content: center; /* horizontal center */
+        align-items: center; /* vertical center */
+    }
+
+    .container {
+        max-width: 700px;
+        background: #333640;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        color: white;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    select, input, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    button {
+        background: #2f6fed;
+        color: white;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+        button:hover {
+            background: #1f57c9;
+        }
+
+    .divider {
+        margin: 35px 0;
+        border-top: 1px solid #ddd;
+    }
+
+    .create-team-box {
+        background: #fafafa;
+        padding: 18px;
+        border-radius: 10px;
+    }
+
+    .toggle {
+        background: #444;
+        color: white;
+        padding: 10px;
+        border: none;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .row {
+        display: flex;
+        gap: 12px;
+    }
+
+        .row > div {
+            flex: 1;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container">
+
+        <h2>Add New Match</h2>
+
+        <form method="POST" action="/admin/add_match">
+
+            <label>Home Team</label>
+            <select name="home_team">
+                {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Away Team</label>
+            <select name="away_team" >
+                {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Competition Stage</label>
+            <select name="stage" required>
+                <option value="GROUP">Group Stage</option>
+                <option value="ROUND16">Round of 16</option>
+                <option value="QUARTER">Quarter Finals</option>
+                <option value="SEMI">Semi Finals</option>
+                <option value="FINAL">Final</option>
+            </select>
+
+            <label>Match Date & Time</label>
+            <input type="datetime-local" name="match_datetime" >
+
+            <button type="submit">Create Match</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <button class="toggle" onclick="toggleTeamForm()">+ Create New Team</button>
+
+        <div id="teamForm" class="create-team-box hidden">
+
+            <h3>Create Team</h3>
+
+            <form method="POST" action="/admin/add_team">
+
+                <label>Team Name</label>
+                <input type="text" name="team_name" >
+
+                <label>Logo URL (without extension if you want)</label>
+                <input type="text" name="logo_url" >
+
+                <button type="submit">Add Team</button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleTeamForm() {
+    const box = document.getElementById("teamForm");
+    box.classList.toggle("hidden");
+    }
+</script>
+{% endblock %}

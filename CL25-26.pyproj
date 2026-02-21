@@ -97,6 +97,8 @@
     <Content Include="HelloFlask\static\images\CL25-26\spain_real-madrid.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\spain_villarreal.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\turkey_galatasaray.football-logos.cc.svg" />
+    <Content Include="HelloFlask\templates\addGame.html" />
+    <Content Include="HelloFlask\templates\addGame2.html" />
     <Content Include="HelloFlask\templates\base.html" />
     <Content Include="HelloFlask\templates\card.html" />
     <Content Include="HelloFlask\templates\card2.html" />

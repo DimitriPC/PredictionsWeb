@@ -28,44 +28,14 @@
     <div class="card" style="top:10px">
         <div class="card-body">
             <h1 class="card-title">Predictions CL 2025-26</h1>
-            <p class="card-text">Modifiez la prediction</p>
+            <p class="card-text">Ajouter un match</p>
         </div>
     </div>
     <br />
     <div class="card">
         <div class="card-body">
-
-            <div class="row align-items-center">
-                <div class="col-5 text-end">
-                    <img src="{{ url_for('static',
-                     filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
-                         alt="{{ match.equipeHome.name }}"
-                         style="height:60px;">
-                </div>
-
-                <div class="col-2 text-center">
-                    <div class="fw-bold">VS</div>
-                    <small>
-                        {{ match.dateMatch.strftime("%d %b %H:%M") if match.dateMatch else "" }}
-                    </small>
-                </div>
-
-                <div class="col-5 text-start">
-                    <img src="{{ url_for('static',
-                        filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
-                         alt="{{ match.equipeAway.name }}"
-                         style="height:60px;">
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <br />
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Score equipe 1</h5>
-            <p class="card-text">Rentrer le nombre de buts de l'equipe 1</p>
-            <input type="number" id="buts1Input" name="buts1" >
+            <h5 class="card-title">Equipe Home</h5>
+            <input type="number" id="buts1Input" name="buts1">
         </div>
     </div>
     <br />
@@ -73,7 +43,7 @@
         <div class="card-body">
             <h5 class="card-title">Score equipe 2</h5>
             <p class="card-text">Rentrer le nombre de buts de l'equipe 2</p>
-            <input type="number" id="buts2Input" name="buts2" >
+            <input type="number" id="buts2Input" name="buts2">
         </div>
     </div>
     <br />
@@ -81,7 +51,7 @@
         <div class="card-body">
             <h5 class="card-title">Date du match</h5>
             <p class="card-text">Rentrer la date et l'heure du match</p>
-            <input type="datetime-local" id="dateInput" name="date" >
+            <input type="datetime-local" id="dateInput" name="date">
         </div>
     </div>
     <br />

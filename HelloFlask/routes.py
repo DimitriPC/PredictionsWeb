@@ -165,48 +165,40 @@ def ranking():
 @app.route('/modification/<int:matchId>', methods=['GET', 'POST'])
 def modification(matchId):
     #make prediction visible or invisible only for admin on predictions page
+    #its possible to have different score prediction to outcome prediction
     if request.method == "POST":
 
-        matchPK = request.form["matchs"]
+        match = db.session.get(Match, matchId)
         resultat = request.form.get("resultat")
         scoreTeam1 = request.form["buts1"]        
         scoreTeam2 = request.form["buts2"]
         dateMatch = request.form["date"]
 
-        team1 = matchPK.split()[0]
-        team2 = matchPK.split()[2]
-        stadeCompetUnformat = matchPK.split()[3]
-        stadeCompet = stadeCompetUnformat.replace("(", "").replace(")", "")
-        
-        
-
-        with sqlite3.connect(absolute_path, timeout=2) as con:
-            cur = con.cursor()
-
+        #give win/lose to all
         if (scoreTeam1 and scoreTeam2):
-            data2 = (resultat, team1, team2, stadeCompet)
-            sqlStatement2 = 'UPDATE prediction SET winResultat = CASE WHEN prediction.resultat = ? THEN 1 ELSE 0 END WHERE equipe1 = ? AND equipe2 = ? AND stadeCompet = ?;'
-            data4 = (scoreTeam1, scoreTeam2,team1, team2, stadeCompet)
-            sqlStatement4 = 'UPDATE match set scoreEquipe1 = ?, scoreEquipe2 = ? where equipe1 = ? and equipe2 = ? and stadeCompet = ?;'
-            data5 = (scoreTeam1, scoreTeam2, team1, team2, stadeCompet)
-            sqlStatement5 = 'UPDATE prediction SET winScore = CASE WHEN prediction.scoreTeam1 = ? AND prediction.scoreTeam2 = ? THEN 1 ELSE 0 END WHERE equipe1 = ? AND equipe2 = ? AND stadeCompet = ?;'
-            cur.execute(sqlStatement2, data2)
-            cur.execute(sqlStatement4, data4)
-            cur.execute(sqlStatement5, data5)
+            for prediction in match.predictions:
+                prediction.winScore = True if (prediction.scoreTeam1 == match.scoreEquipe1 and prediction.scoreTeam2 == match.scoreEquipe2) else False
+                prediction.winOutcome = True if (prediction.resultatMatch == match.result) else False
         
-        if not (scoreTeam1 or scoreTeam2):
-            data3 = (dateMatch, team1, team2, stadeCompet)
-            sqlStatement3 = 'update match set dateMatch = ? where equipe1 = ? and equipe2 = ? and stadeCompet = ?;'
-            cur.execute(sqlStatement3, data3)
-        
-        con.commit()
-        con.close()
-
+        if (dateMatch):
+            dateObj = datetime.strptime(dateMatch, "%Y-%m-%dT%H:%M").date() 
+            match.dateMatch = dateObj
+        db.session.commit()
+        #Notification to say match was updated
         return redirect(url_for("ranking"))
-
     else:
         match = db.session.get(Match, matchId)
         return render_template("modification.html", match=match) 
+
+@app.route('/addGame', methods=['GET', 'POST'])
+def addGame():
+    if request.method == "POST":
+        return "allo"
+    else:
+        stmt = select(Equipe)
+        equipes = db.session.scalars(stmt).all()
+        return render_template("addGame.html", teams=equipes)
+
         
 
 

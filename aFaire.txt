@@ -16,3 +16,15 @@ Non joue dispo: blanc
 Partie de points: vert clair
 Tous les points: vert fonce
 Joue: Contour noir
+
+
+Add a game
+- Home team
+- Away team
+- Competing Stage
+
+Add a team
+- Name
+- logo_url
+
+Next step: Add game/add team

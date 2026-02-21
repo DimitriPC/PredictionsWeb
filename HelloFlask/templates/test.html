@@ -1,0 +1,31 @@
+<label>Team</label>
+
+<select id="teamSelect" name="team_select" onchange="toggleCustomTeam()">
+    <option value="">-- Choose team --</option>
+    {% for team in teams %}
+        <option value="{{ team.id }}">{{ team.name }}</option>
+    {% endfor %}
+    <option value="custom">Other (create new)</option>
+</select>
+
+<input
+    type="text"
+    id="customTeam"
+    name="custom_team"
+    placeholder="Enter new team name"
+    style="display:none; margin-top:8px;"
+>
+<script>
+function toggleCustomTeam() {
+    const select = document.getElementById("teamSelect");
+    const custom = document.getElementById("customTeam");
+
+    if (select.value === "custom") {
+        custom.style.display = "block";
+        custom.required = true;
+    } else {
+        custom.style.display = "none";
+        custom.required = false;
+    }
+}
+</script>
