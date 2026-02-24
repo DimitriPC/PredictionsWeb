@@ -1,12 +1,10 @@
-1. Cacher les predictions a ceux qui n'ent ont pas fait une
 2. Ajuster page ranking sur phone
 3. Graphe de ranking
-4. Ajouter/Confirmer matchs directement sur plateforme
+
 5.1 Griser matchs deja joues
-5.2 Fermer matchs deja joues
+
 6. Plusieurs pages de tournois
 7. Resultat des matchs
-8. Terminologie matchs (PL1STLEG, FAC1STLEG, etc)
 9. Annuler predictions
 
 Legende de predictions couleur: 
@@ -18,13 +16,4 @@ Tous les points: vert fonce
 Joue: Contour noir
 
 
-Add a game
-- Home team
-- Away team
-- Competing Stage
 
-Add a team
-- Name
-- logo_url
-
-Next step: Add game/add team

@@ -4,26 +4,28 @@ from sqlalchemy import ForeignKey,ForeignKeyConstraint, UniqueConstraint, Numeri
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from HelloFlask import app, db
+from flask_login import UserMixin
 from decimal import Decimal
 from datetime import date, time, datetime
 import os
 
 
-class Individu(db.Model):
+class Individu(db.Model, UserMixin):
     __tablename__ = "individu"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     nomComplet: Mapped[str] = mapped_column(unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String(60), nullable=False)
+    is_admin: Mapped[bool] = mapped_column(default=False)
 
     predictions: Mapped[List["Prediction"]] = relationship(back_populates="individu", 
                                                            cascade="all, delete-orphan",
                                                            passive_deletes=True)
 
 class Result(IntEnum):
-    DRAW = 0
-    HOME = 1
-    AWAY = 2
+    DRAW = 1
+    HOME = 3
+    AWAY = 0
 
 class Match(db.Model):
     __tablename__ = "match"

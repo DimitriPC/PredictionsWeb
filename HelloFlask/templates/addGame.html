@@ -71,7 +71,7 @@
     }
 
     .create-team-box {
-        background: #fafafa;
+        
         padding: 18px;
         border-radius: 10px;
     }
@@ -106,7 +106,8 @@
 
         <h2>Add New Match</h2>
 
-        <form method="POST" action="/admin/add_match">
+        <form method="POST" action="/addGame">
+            <input type="hidden" name="form_type" value="add_game">
 
             <label>Home Team</label>
             <select name="home_team">
@@ -116,14 +117,14 @@
             </select>
 
             <label>Away Team</label>
-            <select name="away_team" >
+            <select name="away_team">
                 {% for team in teams %}
                 <option value="{{ team.id }}">{{ team.name }}</option>
                 {% endfor %}
             </select>
 
             <label>Competition Stage</label>
-            <select name="stage" required>
+            <select name="stage">
                 <option value="GROUP">Group Stage</option>
                 <option value="ROUND16">Round of 16</option>
                 <option value="QUARTER">Quarter Finals</option>
@@ -132,7 +133,7 @@
             </select>
 
             <label>Match Date & Time</label>
-            <input type="datetime-local" name="match_datetime" >
+            <input type="datetime-local" name="match_datetime">
 
             <button type="submit">Create Match</button>
         </form>
@@ -145,13 +146,14 @@
 
             <h3>Create Team</h3>
 
-            <form method="POST" action="/admin/add_team">
+            <form method="POST" action="/addGame">
+                <input type="hidden" name="form_type" value="add_team">
 
                 <label>Team Name</label>
-                <input type="text" name="team_name" >
+                <input type="text" name="team_name">
 
                 <label>Logo URL (without extension if you want)</label>
-                <input type="text" name="logo_url" >
+                <input type="text" name="logo_url">
 
                 <button type="submit">Add Team</button>
             </form>

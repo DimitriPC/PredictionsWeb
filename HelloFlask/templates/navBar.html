@@ -8,6 +8,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     {% block styles %}{% endblock %}
 </head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <body>
     <div class="page-wrapper">
         <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -23,12 +24,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/ranking">Ranking</a>
                         </li>
+                        {% if session.get("is_admin") %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/resultat">Resultats</a>
+                            <a class="nav-link" href="{{ url_for('addGame') }}">
+                                Add Game
+                            </a>
                         </li>
+                        {% endif %}
                     </ul>
-                    <form class="d-flex" role="search" action="login">
-                        <button class="btn btn-outline-danger" type="submit">Deconnexion</button>
+                    <form class="d-flex" action="{{ url_for('logout') }}" method="POST">
+                        <button class="btn btn-outline-danger" type="submit">
+                            Deconnexion
+                        </button>
                     </form>
                 </div>
             </div>

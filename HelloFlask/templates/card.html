@@ -1,6 +1,17 @@
-﻿{% extends "base.html" %}
-{% block content %}
+﻿{% extends "navBar.html" %}
+{% block title %}Predictions{% endblock %}
+{% block styles %}
 <style>
+    .list-group-item.border-success,
+    .list-group-item.border-warning,
+    .list-group-item.border-danger {
+        border-width: 5px;
+    }
+
+    body {
+        background-color: #1f1f1f;
+    }
+
     .match-card {
         transition: transform .15s ease, box-shadow .15s ease;
         cursor: pointer;
@@ -30,6 +41,25 @@
         }
 
     /* dropdown */
+    .menu-toggle {
+        display: none;
+    }
+
+    .menu-icon {
+        position: absolute;
+        bottom: 8px;
+        right: 10px;
+        font-size: 22px;
+        color: #6c757d;
+        padding: 4px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .menu-icon:hover {
+            background: rgba(0,0,0,.08);
+        }
+
     .card-dropdown {
         position: absolute;
         right: 10px;
@@ -37,8 +67,8 @@
         background: white;
         border-radius: 10px;
         box-shadow: 0 8px 18px rgba(0,0,0,.25);
-        display: none;
         min-width: 120px;
+        display: none;
         z-index: 10;
     }
 
@@ -53,25 +83,27 @@
                 background: #f1f1f1;
             }
 
-        .card-dropdown.show {
-            display: block;
-        }
+    /* MAGIC: checked checkbox shows menu */
+    .menu-toggle:checked + label + .card-dropdown {
+        display: block;
+    }
 </style>
-
+{% endblock %}
+{% block content %}
 <h2 class="text-center mt-4 mb-3 text-white">Upcoming Matches</h2>
 
 <div class="container mt-4">
 
     <button class="btn btn-dark w-100 text-start mb-2"
             data-bs-toggle="collapse"
-            data-bs-target="#pendingCollapse"
+            data-bs-target="#todoCollapse"
             aria-expanded="true">
         > To Predict
     </button>
 
-    <div class="collapse show" id="pendingCollapse">
+    <div class="collapse show" id="todoCollapse">
         <div class="position-relative">
-            {% for match in pending_matches %}
+            {% for match in toDo_matches %}
             <a href="{{ url_for('prediction_match', matchId=match.id) }}"
                class="text-decoration-none text-dark">
 
@@ -105,34 +137,74 @@
                     </div>
                 </div>
             </a>
-            <button class="card-menu-btn" onclick="toggleMenu(event, this)">⋮</button>
-
-            <div class="card-dropdown">
-                <a href="{{ url_for('ranking') }}">Edit</a>
+            {% if session.get("is_admin") %}
+            <div class="dropdown" style="position:absolute; bottom:8px; right:10px;">
+                <button class="btn btn-link text-secondary p-0 fs-4" data-bs-toggle="dropdown">⋮</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{{ url_for('modification', matchId=match.id) }}">Edit</a></li>
+                </ul>
             </div>
-            <script>
-                function toggleMenu(event, btn) {
-                event.stopPropagation();
-
-                const menu = btn.nextElementSibling;
-
-                // close others
-                document.querySelectorAll(".card-dropdown").forEach(m => {
-                if (m !== menu) m.classList.remove("show");
-                });
-
-                menu.classList.toggle("show");
-                }
-
-                // close when clicking anywhere
-                document.addEventListener("click", function() {
-                document.querySelectorAll(".card-dropdown")
-                .forEach(m => m.classList.remove("show"));
-                });
-            </script>
+            {% endif %}
             {% endfor %}
         </div>
 
+    </div>
+</div>
+<div class="container mt-4">
+
+    <button class="btn btn-dark w-100 text-start mb-2"
+            data-bs-toggle="collapse"
+            data-bs-target="#pendingCollapse"
+            aria-expanded="true">
+        > Pending
+    </button>
+
+    <div class="collapse show" id="pendingCollapse">
+        <div class="position-relative">
+            {% for match in pending_matches %}
+
+            <div class="card mb-3 match-card shadow-sm">
+                <a href="{{ url_for('prediction_match', matchId=match.id) }}"
+                   class="text-decoration-none text-dark">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-5 text-end">
+                                <img src="{{ url_for('static',
+                                filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
+                                     alt="{{ match.equipeHome.name }}"
+                                     style="height:60px;">
+                            </div>
+
+                            <div class="col-2 text-center">
+                                <div class="fw-bold">VS</div>
+                                <small class="text-muted">
+                                    {{ match.dateMatch.strftime("%d %b") if match.dateMatch else "" }}
+                                    {{ match.heureMatch.strftime("%H:%M") if match.heureMatch else "" }}
+                                </small>
+                            </div>
+
+                            <div class="col-5 text-start">
+                                <img src="{{ url_for('static',
+                                filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
+                                     alt="{{ match.equipeAway.name }}"
+                                     style="height:60px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                {% if session.get("is_admin") %}
+                <div class="dropdown" style="position:absolute; bottom:8px; right:10px;">
+                    <button class="btn btn-link text-secondary p-0 fs-4" data-bs-toggle="dropdown">⋮</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url_for('modification', matchId=match.id) }}">Edit</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+
+            {% endfor %}
+        </div>
     </div>
 </div>
 <div class="container mt-4">
@@ -141,7 +213,7 @@
             data-bs-toggle="collapse"
             data-bs-target="#finishedCollapse"
             aria-expanded="false">
-        > Finished
+        > Expired
     </button>
 
     <div class="collapse" id="finishedCollapse">
@@ -171,15 +243,39 @@
                              style="height:60px;">
                     </div>
                 </div>
-
+                <button class="btn btn-dark" onclick="toggleDetails({{ match.id }})" data-bs-toggle="collapse" data-bs-target="#details-{{ loop.index }}">
+                    Show details
+                </button>
+                <div class="collapse" id="details-{{ loop.index }}">
+                    <ul class="list-group list-group-flush">
+                        {% for prediction in match.predictions %}
+                        {% if prediction.winScore and prediction.winOutcome %}
+                        {% set border_class = "border-success" %}  {# green if fully correct #}
+                        {% elif prediction.winOutcome %}
+                        {% set border_class = "border-warning" %}  {# yellow if only outcome correct #}
+                        {% else %}
+                        {% set border_class = "border-danger" %}  {# red if wrong #}
+                        {% endif %}
+                        <li class="list-group-item {{ border_class }}">
+                            <div class="fw-bold small">
+                                {{prediction.individu.nomComplet}}: {{prediction.scoreTeam1}}:{{prediction.scoreTeam2}}
+                            </div>
+                            <p class="mb-1">{{prediction.autres}}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-
+            {% if session.get("is_admin") %}
+            <div class="dropdown" style="position:absolute; bottom:8px; right:10px;">
+                <button class="btn btn-link text-white p-0 fs-4" data-bs-toggle="dropdown">⋮</button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                    <li><a class="dropdown-item" href="{{ url_for('modification', matchId=match.id) }}">Edit</a></li>
+                </ul>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
-
     </div>
 </div>
-
-
-
 {% endblock %}

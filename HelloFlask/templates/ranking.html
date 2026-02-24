@@ -6,29 +6,13 @@
         background-color: #1f1f1f;
     }
 
-    .table {
-        position: absolute;
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 75%;
-        height: 45%;
-        color: white;
-    }
-
-    tr {
-        border-bottom: 1px solid white;
-        border-top: 1px solid white;
-    }
 </style>
 {% endblock %}
 {% block content %}
-<table class="table" id="html-data-table">
+<table class="table table-dark table-striped" id="html-data-table">
     <thead>
         <tr>
-            {% for joueur in joueurs %}
-            
-            {% endfor %}
+            <th scope="col">#</th>
             <th scope="col">Joueur</th>
             <th scope="col">Games Played</th>
             <th scope="col">Wins (Outcome)</th>
@@ -36,27 +20,17 @@
         </tr>
     </thead>
     <tbody>
+        {% for joueur in joueurs %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ joueur.nomComplet }}</td>
+            <td>{{ joueur.nbr_predictions }}</td>
+            <td>{{ joueur.nbr_winOutcome }}</td>
+            <td>{{ joueur.nbr_winScore }}</td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-
-    var myjson = {{ listRows| tojson | safe }};
-    renderDataInTheTable(myjson)
-
-
-    function renderDataInTheTable(todos) {
-        const mytable = document.getElementById("html-data-table");
-        todos.forEach(todo => {
-            let newRow = document.createElement("tr");
-            Object.values(todo).forEach((value) => {
-                let cell = document.createElement("td");
-                cell.innerText = value;
-                newRow.appendChild(cell);
-            })
-            mytable.appendChild(newRow);
-        });
-    }
-</script>
 {% endblock %}

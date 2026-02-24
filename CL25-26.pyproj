@@ -28,7 +28,12 @@
     <Compile Include="HelloFlask\tables.py" />
     <Compile Include="HelloFlask\__init__.py" />
     <Compile Include="migrations\env.py" />
+    <Compile Include="migrations\migrations\env.py" />
+    <Compile Include="migrations\migrations\versions\b92f2d023ce5_initial_schema_with_tables.py" />
+    <Compile Include="migrations\migrations\versions\ef4f518d317e_check_changes.py" />
+    <Compile Include="migrations\versions\a554858484da_added_is_admin_to_individu.py" />
     <Compile Include="migrations\versions\b92f2d023ce5_initial_schema_with_tables.py" />
+    <Compile Include="migrations\versions\ef4f518d317e_check_changes.py" />
     <Compile Include="runserver.py" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +44,10 @@
     <Folder Include="HelloFlask\templates\" />
     <Folder Include="migrations\" />
     <Folder Include="migrations\" />
+    <Folder Include="migrations\migrations\" />
+    <Folder Include="migrations\migrations\versions\" />
+    <Folder Include="migrations\migrations\versions\__pycache__\" />
+    <Folder Include="migrations\migrations\__pycache__\" />
     <Folder Include="migrations\versions\" />
     <Folder Include="migrations\versions\__pycache__\" />
     <Folder Include="migrations\__pycache__\" />
@@ -97,12 +106,10 @@
     <Content Include="HelloFlask\static\images\CL25-26\spain_real-madrid.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\spain_villarreal.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\turkey_galatasaray.football-logos.cc.svg" />
+    <Content Include="HelloFlask\templates\aaa.html" />
     <Content Include="HelloFlask\templates\addGame.html" />
-    <Content Include="HelloFlask\templates\addGame2.html" />
     <Content Include="HelloFlask\templates\base.html" />
     <Content Include="HelloFlask\templates\card.html" />
-    <Content Include="HelloFlask\templates\card2.html" />
-    <Content Include="HelloFlask\templates\card3.html" />
     <Content Include="HelloFlask\templates\modification.html" />
     <Content Include="HelloFlask\templates\failedLogin.html" />
     <Content Include="HelloFlask\templates\failedRegister.html" />
@@ -112,9 +119,18 @@
     <Content Include="HelloFlask\templates\ranking.html" />
     <Content Include="HelloFlask\templates\register.html" />
     <Content Include="HelloFlask\templates\resultat.html" />
+    <Content Include="HelloFlask\templates\test.html" />
     <Content Include="migrations\alembic.ini" />
+    <Content Include="migrations\migrations\alembic.ini" />
+    <Content Include="migrations\migrations\README" />
+    <Content Include="migrations\migrations\script.py.mako" />
+    <Content Include="migrations\migrations\versions\__pycache__\b92f2d023ce5_initial_schema_with_tables.cpython-312.pyc" />
+    <Content Include="migrations\migrations\versions\__pycache__\ef4f518d317e_check_changes.cpython-312.pyc" />
+    <Content Include="migrations\migrations\__pycache__\env.cpython-312.pyc" />
     <Content Include="migrations\README" />
     <Content Include="migrations\script.py.mako" />
+    <Content Include="migrations\versions\__pycache__\b92f2d023ce5_initial_schema_with_tables.cpython-312.pyc" />
+    <Content Include="migrations\versions\__pycache__\ef4f518d317e_check_changes.cpython-312.pyc" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

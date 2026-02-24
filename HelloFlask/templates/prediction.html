@@ -24,7 +24,7 @@
 </style>
 {% endblock %}
 {% block content %}
-<form action="#" method="POST">
+<form method="POST" action="{{ url_for('prediction_match', matchId=match.id) }}">
     <div class="card" style="top:10px">
         <div class="card-body">
             <h1 class="card-title">Predictions CL 2025-26</h1>

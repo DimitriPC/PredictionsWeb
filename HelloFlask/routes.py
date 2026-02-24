@@ -4,12 +4,14 @@ from flask_bcrypt import bcrypt
 import sqlite3, json, os
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from .tables import Individu, Match, Prediction, Equipe
 from sqlalchemy import select, insert, func, Integer
 from sqlalchemy.orm import joinedload
 from random import randint, choice
+from flask_login import login_user, login_required, logout_user, current_user
 import sys
+
 
 THIS_FOLDER = Path(__file__).parent.resolve()
 absolute_path = THIS_FOLDER / "can2025DB.db"
@@ -43,8 +45,12 @@ def login():
 
         # check password
         if bcrypt.checkpw(enteredPassword, user.password.encode("utf-8")):
-            session["userId"] = user.id
-            return redirect(url_for("prediction"))
+            login_user(user)
+            if (user.nomComplet == "Dimipc"):
+                user.is_admin = True;
+                session["is_admin"] = user.is_admin
+            next = request.args.get("next")
+            return redirect(next or url_for('prediction'))
 
         return render_template(
             "failedLogin.html",
@@ -79,7 +85,7 @@ def register():
             user.password = hashed
             db.session.commit()
 
-            session["userId"] = user.id
+            login_user(user)
             return redirect(url_for("prediction"))
 
         # User does not exist → create new one
@@ -94,85 +100,101 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        session["userId"] = new_user.id
+        login_user(user)
         return redirect(url_for("prediction"))
 
     return render_template("register.html")
 
 
 @app.route('/prediction', methods=['GET', 'POST'])
+@login_required
 def prediction():
+    # Montreal is UTC-5
+    now = datetime.utcnow() - timedelta(hours=5)
+
+    to_do = Match.query.filter(
+        Match.dateMatch > now,
+        ~Match.predictions.any(Prediction.individu_id == current_user.id)
+    ).all()
+
+    pending = Match.query.filter(
+        Match.dateMatch > now,
+        Match.predictions.any(Prediction.individu_id == current_user.id)
+    ).all()
+
+    finished = Match.query.filter(
+        Match.dateMatch <= now
+    ).all()
+
+    return render_template("card.html", toDo_matches = to_do, pending_matches=pending, finished_matches=finished)
+
+        
+
+@app.route('/prediction/<int:matchId>', methods=['GET', 'POST'])
+@login_required
+def prediction_match(matchId):
     if request.method == "POST":
 
-        userId = int(session["userId"])
-        matchID = int(request.form["matchs"])
-        resultat = request.form["resultat"]
+        userId = current_user.id
+        resultat = request.form["resultat"]        
         scoreTeam1 = int(request.form["buts1"])     
         scoreTeam2 = int(request.form["buts2"])
         autresPred = request.form["autres"]
 
-        pred = Prediction(individu_id=userId, idMatch=matchID, resultat=resultat, scoreTeam1=scoreTeam1, scoreTeam2=scoreTeam2, autres=autresPred, datePrediction=datetime.now())
+        pred = Prediction(individu_id=userId, idMatch=matchId, resultatMatch=resultat, scoreTeam1=scoreTeam1, 
+                          scoreTeam2=scoreTeam2, autres=autresPred, datePrediction=datetime.now())
         db.session.add(pred)
         db.session.commit()
 
         #add notification to say prediction added
         return redirect(url_for("ranking"))
     else:
-
-        stmt = select(Match).options(joinedload(Match.equipeHome), joinedload(Match.equipeAway))
-        all_matches = db.session.scalars(stmt).all()
-
-        pending = []
-        finished = []
-        for m in all_matches:
-            if m.dateMatch:
-
-                if m.dateMatch > datetime.now():
-                    pending.append(m)
-                else:
-                    finished.append(m)
-            else:
-                pending.append(m)  # no date = predictible
-
-        return render_template("card3.html", pending_matches=pending, finished_matches=finished)
-
-@app.route('/prediction/<matchId>', methods=['GET', 'POST'])
-def prediction_match(matchId):
-    match = db.session.get(Match, matchId)
-    teamHome = db.session.get(Equipe, match.equipeHomeId)
-    teamAway = db.session.get(Equipe, match.equipeAwayId)
-    return render_template("prediction.html", match=match)
+        match = db.session.get(Match, matchId)
+        teamHome = db.session.get(Equipe, match.equipeHomeId)
+        teamAway = db.session.get(Equipe, match.equipeAwayId)
+        return render_template("prediction.html", match=match)
 
 @app.route('/ranking', methods=['GET', 'POST'])
 def ranking():
     
     stmt = (
         select(
+            Individu.nomComplet,
             Prediction.individu_id,
             func.count().label("nbr_predictions"),
             func.sum(func.cast(Prediction.winScore, Integer)).label("nbr_winScore"),
             func.sum(func.cast(Prediction.winOutcome, Integer)).label("nbr_winOutcome")
         )
-        .group_by(Prediction.individu_id)
+        .join(Individu, Individu.id == Prediction.individu_id)
+        .group_by(Individu.nomComplet, Prediction.individu_id)
+        .order_by(
+        (func.sum(func.cast(Prediction.winScore, Integer)) +
+         func.sum(func.cast(Prediction.winOutcome, Integer))).desc()
+        )
     )
-    ranking = db.session.execute(stmt).all()
-    print(ranking, file=sys.stderr)
+        
+    
+    joueurs = db.session.execute(stmt).all()
+    return render_template("ranking.html", joueurs=joueurs)
 
-    return "ranking page"
-
-
-
+#admin route
 @app.route('/modification/<int:matchId>', methods=['GET', 'POST'])
+@login_required
 def modification(matchId):
     #make prediction visible or invisible only for admin on predictions page
     #its possible to have different score prediction to outcome prediction
     if request.method == "POST":
 
         match = db.session.get(Match, matchId)
-        resultat = request.form.get("resultat")
-        scoreTeam1 = request.form["buts1"]        
-        scoreTeam2 = request.form["buts2"]
-        dateMatch = request.form["date"]
+        scoreTeam1 = request.form.get("buts1")      
+        scoreTeam2 = request.form.get("buts2")
+        dateMatch = request.form.get("date")
+
+        
+        #update match
+        if scoreTeam1 is not None and scoreTeam2 is not None:
+            match.scoreEquipe1 = int(scoreTeam1)
+            match.scoreEquipe2 = int(scoreTeam2)
 
         #give win/lose to all
         if (scoreTeam1 and scoreTeam2):
@@ -181,59 +203,52 @@ def modification(matchId):
                 prediction.winOutcome = True if (prediction.resultatMatch == match.result) else False
         
         if (dateMatch):
-            dateObj = datetime.strptime(dateMatch, "%Y-%m-%dT%H:%M").date() 
+            dateObj = datetime.strptime(dateMatch, "%Y-%m-%dT%H:%M")
             match.dateMatch = dateObj
+
         db.session.commit()
+
         #Notification to say match was updated
         return redirect(url_for("ranking"))
     else:
         match = db.session.get(Match, matchId)
         return render_template("modification.html", match=match) 
 
+#admin route
 @app.route('/addGame', methods=['GET', 'POST'])
+@login_required
 def addGame():
     if request.method == "POST":
-        return "allo"
+        form_type = request.form.get("form_type")
+
+        if (form_type == "add_team"):
+            teamName = request.form.get("team_name")
+            logoUrl = request.form.get("logo_url")
+
+            newTeam = Equipe(name=teamName, logo_url=logoUrl)
+            db.session.add(newTeam)
+            db.session.commit()
+
+        if (form_type == "add_game"):
+            homeTeam = int(request.form.get("home_team"))
+            awayTeam = int(request.form.get("away_team"))
+            stadeCompet = request.form.get("stage")
+
+            date = request.form.get("match_datetime")
+            if (date):
+                date_obj = datetime.strptime(date, "%Y-%m-%dT%H:%M")
+
+            newMatch = Match(equipeHomeId=homeTeam, equipeAwayId=awayTeam, stadeCompet=stadeCompet, dateMatch=date_obj)
+            db.session.add(newMatch)
+            db.session.commit()
+
+        return redirect(url_for("addGame"))
     else:
         stmt = select(Equipe)
         equipes = db.session.scalars(stmt).all()
         return render_template("addGame.html", teams=equipes)
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@app.route('/resultat', methods=['GET', 'POST'])
-def resultat():
-    with sqlite3.connect(absolute_path) as con:
-        cur = con.cursor()
-
-    sqlStatement = 'SELECT equipe1, equipe2, stadeCompet from match where dateMatch is not null ORDER BY dateMatch DESC;'
-
-    cur.execute(sqlStatement)
-    list = cur.fetchall()
-    print(list)
-    
-    sqlStatement2 = 'SELECT individu_nomComplet, equipe1, equipe2, stadeCompet, scoreTeam1, scoreTeam2, autres FROM prediction;'
-    
-    cur.execute(sqlStatement2)
-    listPredictions = cur.fetchall()
-
-    return render_template("resultat.html", listRows=list, predRows=listPredictions)
-
-
- 
-
-
+@app.route("/logout", methods=["POST"])
+def logout():
+    logout_user()
+    return redirect(url_for("login"))
