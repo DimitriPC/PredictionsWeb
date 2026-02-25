@@ -100,7 +100,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        login_user(user)
+        login_user(new_user)
         return redirect(url_for("prediction"))
 
     return render_template("register.html")
