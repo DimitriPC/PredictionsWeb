@@ -124,13 +124,15 @@
             </select>
 
             <label>Competition Stage</label>
-            <select name="stage">
+
+            <input type="text" name="stage" list="stageNames">
+            <datalist id="stageNames">
                 <option value="GROUP">Group Stage</option>
                 <option value="ROUND16">Round of 16</option>
                 <option value="QUARTER">Quarter Finals</option>
                 <option value="SEMI">Semi Finals</option>
                 <option value="FINAL">Final</option>
-            </select>
+            </datalist>
 
             <label>Match Date & Time</label>
             <input type="datetime-local" name="match_datetime">
