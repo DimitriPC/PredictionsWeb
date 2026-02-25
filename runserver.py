@@ -3,7 +3,7 @@ from HelloFlask import app, db    # Imports the code from HelloFlask/__init__.py
 from flask import Flask
 from flask_migrate import Migrate
 from HelloFlask.seed import seed_db
-from HelloFlask.tables import User, Individu, Result, Match, Prediction, Equipe
+from HelloFlask.tables import Individu, Result, Match, Prediction, Equipe
 
 migrate = Migrate(app, db)
 
