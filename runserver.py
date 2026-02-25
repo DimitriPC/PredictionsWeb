@@ -3,11 +3,13 @@ from HelloFlask import app, db    # Imports the code from HelloFlask/__init__.py
 from flask import Flask
 from flask_migrate import Migrate
 from HelloFlask.seed import seed_db
+from HelloFlask.tables import User, Individu, Result, Match, Prediction, Equipe
 
 migrate = Migrate(app, db)
 
 with app.app_context():
-    seed_db()
+    db.create_all()
+    
 
 if __name__ == '__main__':
     HOST = os.environ.get('SERVER_HOST', 'localhost')
