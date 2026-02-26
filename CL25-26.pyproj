@@ -106,9 +106,7 @@
     <Content Include="HelloFlask\static\images\CL25-26\spain_real-madrid.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\spain_villarreal.football-logos.cc.svg" />
     <Content Include="HelloFlask\static\images\CL25-26\turkey_galatasaray.football-logos.cc.svg" />
-    <Content Include="HelloFlask\templates\aaa.html" />
     <Content Include="HelloFlask\templates\addGame.html" />
-    <Content Include="HelloFlask\templates\base.html" />
     <Content Include="HelloFlask\templates\card.html" />
     <Content Include="HelloFlask\templates\modification.html" />
     <Content Include="HelloFlask\templates\failedLogin.html" />
@@ -118,8 +116,6 @@
     <Content Include="HelloFlask\templates\prediction.html" />
     <Content Include="HelloFlask\templates\ranking.html" />
     <Content Include="HelloFlask\templates\register.html" />
-    <Content Include="HelloFlask\templates\resultat.html" />
-    <Content Include="HelloFlask\templates\test.html" />
     <Content Include="migrations\alembic.ini" />
     <Content Include="migrations\migrations\alembic.ini" />
     <Content Include="migrations\migrations\README" />

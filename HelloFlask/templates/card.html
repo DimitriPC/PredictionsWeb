@@ -253,7 +253,7 @@
                         {% set border_class = "border-success" %}  {# green if fully correct #}
                         {% elif prediction.winOutcome %}
                         {% set border_class = "border-warning" %}  {# yellow if only outcome correct #}
-                        {% else %}
+                        {% elif prediction.winOutcome is false %}
                         {% set border_class = "border-danger" %}  {# red if wrong #}
                         {% endif %}
                         <li class="list-group-item {{ border_class }}">
