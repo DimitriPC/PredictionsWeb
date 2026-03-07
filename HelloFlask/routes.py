@@ -192,7 +192,7 @@ def modification(matchId):
 
         
         #update match
-        if scoreTeam1 is not None and scoreTeam2 is not None:
+        if scoreTeam1 and scoreTeam2:
             match.scoreEquipe1 = int(scoreTeam1)
             match.scoreEquipe2 = int(scoreTeam2)
 
