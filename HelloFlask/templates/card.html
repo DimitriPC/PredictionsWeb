@@ -104,47 +104,40 @@
     <div class="collapse show" id="todoCollapse">
         <div class="position-relative">
             {% for match in toDo_matches %}
-            <a href="{{ url_for('prediction_match', matchId=match.id) }}"
-               class="text-decoration-none text-dark">
-
-                <div class="card mb-3 match-card shadow-sm">
-                    <div class="card-body">
-
-                        <div class="row align-items-center">
-                            <div class="col-5 text-end">
-                                <img src="{{ url_for('static',
-                                filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
-                                     alt="{{ match.equipeHome.name }}"
-                                     style="height:60px;">
-                            </div>
-
-                            <div class="col-2 text-center">
-                                <div class="fw-bold">VS</div>
-                                <small class="text-muted">
-                                    {{ match.dateMatch.strftime("%d %b") if match.dateMatch else "" }}
-                                    {{ match.heureMatch.strftime("%H:%M") if match.heureMatch else "" }}
-                                </small>
-                            </div>
-
-                            <div class="col-5 text-start">
-                                <img src="{{ url_for('static',
-                                filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
-                                     alt="{{ match.equipeAway.name }}"
-                                     style="height:60px;">
-                            </div>
+            <div class="card mb-3 match-card shadow-sm"
+                 style="position: relative; cursor: pointer;"
+                 onclick="window.location='{{ url_for('prediction_match', matchId=match.id) }}'">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-5 text-end">
+                            <img src="{{ url_for('static', filename='images/CL25-26/' ~ match.equipeHome.logo_url ~ '.svg') }}"
+                                 alt="{{ match.equipeHome.name }}" style="height:60px;">
                         </div>
-
+                        <div class="col-2 text-center">
+                            <div class="fw-bold">VS</div>
+                            <small class="text-muted">
+                                {{ match.dateMatch.strftime("%d %b") if match.dateMatch else "" }}
+                                {{ match.heureMatch.strftime("%H:%M") if match.heureMatch else "" }}
+                            </small>
+                        </div>
+                        <div class="col-5 text-start">
+                            <img src="{{ url_for('static', filename='images/CL25-26/' ~ match.equipeAway.logo_url ~ '.svg') }}"
+                                 alt="{{ match.equipeAway.name }}" style="height:60px;">
+                        </div>
                     </div>
                 </div>
-            </a>
-            {% if session.get("is_admin") %}
-            <div class="dropdown" style="position:absolute; bottom:8px; right:10px;">
-                <button class="btn btn-link text-secondary p-0 fs-4" data-bs-toggle="dropdown">⋮</button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ url_for('modification', matchId=match.id) }}">Edit</a></li>
-                </ul>
+
+                {% if session.get("is_admin") %}
+                <div class="dropdown" style="position:absolute; bottom:8px; right:10px;"
+                     onclick="event.stopPropagation()">
+                    <button class="btn btn-link text-secondary p-0 fs-4" data-bs-toggle="dropdown">⋮</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url_for('modification', matchId=match.id) }}">Edit</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+
             </div>
-            {% endif %}
             {% endfor %}
         </div>
 
