@@ -67,11 +67,11 @@
             <p class="card-text">Indiquer la prediction de resultat</p>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="inlineCheckbox1" value="3" name="resultat" required>
-                <label class="form-check-label" for="inlineCheckbox1">Victoire equipe 1</label>
+                <label class="form-check-label" for="inlineCheckbox1">Victoire {{ match.equipeHome.name }}</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="inlineCheckbox2" value="0" name="resultat">
-                <label class="form-check-label" for="inlineCheckbox2">Victoire equipe 2</label>
+                <label class="form-check-label" for="inlineCheckbox2">Victoire {{ match.equipeAway.name }}</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="inlineCheckbox3" value="1" name="resultat">
@@ -82,16 +82,16 @@
     <br />
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Score equipe 1</h5>
-            <p class="card-text">Rentrer le nombre de buts predit de l'equipe 1</p>
+            <h5 class="card-title">Score {{ match.equipeHome.name }}</h5>
+            <p class="card-text">Rentrer le nombre de buts predit de l'equipe a domicile</p>
             <input type="number" id="buts1Input" name="buts1" required>
         </div>
     </div>
     <br />
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Score equipe 2</h5>
-            <p class="card-text">Rentrer le nombre de buts predit de l'equipe 2</p>
+            <h5 class="card-title">Score {{ match.equipeAway.name }}</h5>
+            <p class="card-text">Rentrer le nombre de buts predit de l'equipe a l'exterieur</p>
             <input type="number" id="buts2Input" name="buts2" required>
         </div>
     </div>
