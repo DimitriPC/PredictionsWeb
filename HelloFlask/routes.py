@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 from random import randint, choice
 from flask_login import login_user, login_required, logout_user, current_user
 import sys
+from zoneinfo import ZoneInfo
 
 
 THIS_FOLDER = Path(__file__).parent.resolve()
@@ -110,7 +111,7 @@ def register():
 @login_required
 def prediction():
     # Montreal is UTC-5
-    now = datetime.utcnow() - timedelta(hours=5)
+    now = datetime.utcnow()
 
     to_do = Match.query.filter(
         Match.dateMatch > now,
@@ -236,9 +237,12 @@ def addGame():
 
             date = request.form.get("match_datetime")
             if (date):
+                montreal = ZoneInfo("America/Montreal")
                 date_obj = datetime.strptime(date, "%Y-%m-%dT%H:%M")
+                date_obj = date_obj.replace(tzinfo=montreal)  # localize
+                date_obj_utc = date_obj.astimezone(ZoneInfo("UTC")).replace(tzinfo=None)  
 
-            newMatch = Match(equipeHomeId=homeTeam, equipeAwayId=awayTeam, stadeCompet=stadeCompet, dateMatch=date_obj)
+            newMatch = Match(equipeHomeId=homeTeam, equipeAwayId=awayTeam, stadeCompet=stadeCompet, dateMatch=date_obj_utc)
             db.session.add(newMatch)
             db.session.commit()
 
