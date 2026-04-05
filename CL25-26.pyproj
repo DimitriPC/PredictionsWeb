@@ -55,6 +55,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="aFaire.txt" />
+    <Content Include="docker-compose.prod.yml" />
     <Content Include="docker-compose.yml" />
     <Content Include="Dockerfile" />
     <Content Include="HelloFlask\static\images\CL25-26\azerbaijan_qarabag.football-logos.cc.svg" />

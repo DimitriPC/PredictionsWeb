@@ -365,3 +365,5 @@ FodyWeavers.xsd
 #Ignore database
 *.db
 *.sqlite3
+
+*.env
