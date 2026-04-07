@@ -15,7 +15,7 @@ class Individu(db.Model, UserMixin):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     nomComplet: Mapped[str] = mapped_column(unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(db.String(60), nullable=False)
+    password: Mapped[str] = mapped_column(db.String(255), nullable=False)
     is_admin: Mapped[bool] = mapped_column(default=False)
 
     predictions: Mapped[List["Prediction"]] = relationship(back_populates="individu", 
