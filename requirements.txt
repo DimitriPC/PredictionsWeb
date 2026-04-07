@@ -17,6 +17,7 @@ MarkupSafe==3.0.3
 packaging==26.0
 pip==25.2
 psycopg2-binary==2.9.11
+pytz
 SQLAlchemy==2.0.46
 typing_extensions==4.15.0
 Werkzeug==3.1.4

@@ -53,6 +53,7 @@
     <Folder Include="migrations\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".env" />
     <Content Include=".gitignore" />
     <Content Include="aFaire.txt" />
     <Content Include="docker-compose.prod.yml" />

@@ -10,7 +10,7 @@ from sqlalchemy import select, insert, func, Integer
 from sqlalchemy.orm import joinedload
 from random import randint, choice
 from flask_login import login_user, login_required, logout_user, current_user
-import sys
+import sys, pytz
 from zoneinfo import ZoneInfo
 
 
@@ -110,8 +110,8 @@ def register():
 @app.route('/prediction', methods=['GET', 'POST'])
 @login_required
 def prediction():
-    # Montreal is UTC-5
-    now = datetime.utcnow()
+    montreal = pytz.timezone("America/Montreal")
+    now = datetime.now(montreal).replace(tzinfo=None)
 
     to_do = Match.query.filter(
         Match.dateMatch > now,
