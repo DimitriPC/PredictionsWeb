@@ -135,6 +135,8 @@ def prediction():
 @login_required
 def prediction_match(matchId):
     if request.method == "POST":
+        montreal = pytz.timezone("America/Montreal")
+        now = datetime.now(montreal).replace(tzinfo=None)
 
         userId = current_user.id
         resultat = request.form["resultat"]        
@@ -143,7 +145,7 @@ def prediction_match(matchId):
         autresPred = request.form["autres"]
 
         pred = Prediction(individu_id=userId, idMatch=matchId, resultatMatch=resultat, scoreTeam1=scoreTeam1, 
-                          scoreTeam2=scoreTeam2, autres=autresPred, datePrediction=datetime.now())
+                          scoreTeam2=scoreTeam2, autres=autresPred, datePrediction=now)
         db.session.add(pred)
         db.session.commit()
 
