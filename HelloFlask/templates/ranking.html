@@ -40,12 +40,12 @@
             const aText = a.querySelector("[data-col='outcome']").textContent.trim();
             const bText = b.querySelector("[data-col='outcome']").textContent.trim();
 
-            const res = aText.localeCompare(bText);
+            const res = bText.localeCompare(aText);
             if (res !== 0) return res 
 
             const aSub = a.querySelector("[data-col='score']").textContent.trim();
             const bSub = b.querySelector("[data-col='score']").textContent.trim();
-            return aSub.localeCompare(bSub);
+            return bSub.localeCompare(aSub);
         });
         rows.forEach(row => table.querySelector("tbody").appendChild(row));
     }
@@ -58,12 +58,12 @@
         const aText = a.querySelector("[data-col='score']").textContent.trim();
         const bText = b.querySelector("[data-col='score']").textContent.trim();
 
-        const res = aText.localeCompare(bText);
+        const res = bText.localeCompare(aText);
         if (res !== 0) return res 
 
         const aSub = a.querySelector("[data-col='outcome']").textContent.trim();
         const bSub = b.querySelector("[data-col='outcome']").textContent.trim();
-        return aSub.localeCompare(bSub);
+        return bSub.localeCompare(aSub);
     });
     rows.forEach(row => table.querySelector("tbody").appendChild(row));
 }
