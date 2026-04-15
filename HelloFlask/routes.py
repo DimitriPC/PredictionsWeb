@@ -4,7 +4,7 @@ from flask_bcrypt import bcrypt
 import sqlite3, json, os
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from .tables import Individu, Match, Prediction, Equipe
 from sqlalchemy import select, insert, func, Integer
 from sqlalchemy.orm import joinedload
@@ -110,8 +110,7 @@ def register():
 @app.route('/prediction', methods=['GET', 'POST'])
 @login_required
 def prediction():
-    montreal = pytz.timezone("America/Montreal")
-    now = datetime.now(montreal).replace(tzinfo=None)
+    now = datetime.now(timezone.utc)
 
     to_do = Match.query.filter(
         Match.dateMatch > now,
