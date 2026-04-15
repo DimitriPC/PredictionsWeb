@@ -40,11 +40,15 @@
             const aText = a.querySelector("[data-col='outcome']").textContent.trim();
             const bText = b.querySelector("[data-col='outcome']").textContent.trim();
 
-            const res = bText.localeCompare(aText);
+            const res = parseFloat(bText) - parseFloat(aText);
             if (res !== 0) return res 
 
             const aSub = a.querySelector("[data-col='score']").textContent.trim();
             const bSub = b.querySelector("[data-col='score']").textContent.trim();
+
+            if (aSub === 'None' || aSub === '') return 1;
+            if (bSub === 'None' || bSub === '') return -1;
+
             return parseFloat(bSub) - parseFloat(aSub);
         });
         rows.forEach(row => table.querySelector("tbody").appendChild(row));
@@ -58,11 +62,18 @@
         const aText = a.querySelector("[data-col='score']").textContent.trim();
         const bText = b.querySelector("[data-col='score']").textContent.trim();
 
-        const res = bText.localeCompare(aText);
+        if (aText === 'None' || aText === '') return 1;
+        if (bText === 'None' || bText === '') return -1;
+
+        const res = parseFloat(bText) - parseFloat(aText);
         if (res !== 0) return res 
 
         const aSub = a.querySelector("[data-col='outcome']").textContent.trim();
         const bSub = b.querySelector("[data-col='outcome']").textContent.trim();
+        
+        if (aSub === 'None' || aSub === '') return 1;
+        if (bSub === 'None' || bSub === '') return -1;
+
         return parseFloat(bSub) - parseFloat(aSub);
     });
     rows.forEach(row => table.querySelector("tbody").appendChild(row));
