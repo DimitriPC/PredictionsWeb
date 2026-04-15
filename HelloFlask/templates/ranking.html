@@ -45,7 +45,7 @@
 
             const aSub = a.querySelector("[data-col='score']").textContent.trim();
             const bSub = b.querySelector("[data-col='score']").textContent.trim();
-            return bSub.localeCompare(aSub);
+            return parseFloat(bSub) - parseFloat(aSub);
         });
         rows.forEach(row => table.querySelector("tbody").appendChild(row));
     }
@@ -63,7 +63,7 @@
 
         const aSub = a.querySelector("[data-col='outcome']").textContent.trim();
         const bSub = b.querySelector("[data-col='outcome']").textContent.trim();
-        return bSub.localeCompare(aSub);
+        return parseFloat(bSub) - parseFloat(aSub);
     });
     rows.forEach(row => table.querySelector("tbody").appendChild(row));
 }
