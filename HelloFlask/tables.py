@@ -1,13 +1,11 @@
-from enum import auto, IntEnum
+from enum import IntEnum
 from typing import List
-from sqlalchemy import ForeignKey,ForeignKeyConstraint, UniqueConstraint, Numeric
+from sqlalchemy import ForeignKey,ForeignKeyConstraint, UniqueConstraint, Numeric, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from flask_sqlalchemy import SQLAlchemy
-from HelloFlask import app, db
+from HelloFlask import db
 from flask_login import UserMixin
 from decimal import Decimal
-from datetime import date, time, datetime
-import os
+from datetime import datetime
 
 
 class Individu(db.Model, UserMixin):
@@ -34,7 +32,7 @@ class Match(db.Model):
     equipeHomeId: Mapped[int] = mapped_column(ForeignKey("equipe.id"), nullable=False)
     equipeAwayId: Mapped[int] = mapped_column(ForeignKey("equipe.id"), nullable=False)
     stadeCompet: Mapped[str] = mapped_column(nullable=False)
-    dateMatch: Mapped[datetime | None]
+    dateMatch: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     scoreEquipe1: Mapped[int | None]
     scoreEquipe2: Mapped[int | None]
     coteEquipe1: Mapped[Decimal | None] = mapped_column(Numeric(6,2))
@@ -78,7 +76,7 @@ class Prediction(db.Model):
     winScore: Mapped[bool | None]
     winOutcome: Mapped[bool | None]
     autres: Mapped[str | None]
-    datePrediction: Mapped[datetime | None] 
+    datePrediction: Mapped[datetime | None] =  mapped_column(DateTime(timezone=True))
 
     __table_args__ = (
         UniqueConstraint("individu_id", "idMatch"),

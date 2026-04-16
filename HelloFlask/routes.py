@@ -134,8 +134,7 @@ def prediction():
 @login_required
 def prediction_match(matchId):
     if request.method == "POST":
-        montreal = pytz.timezone("America/Montreal")
-        now = datetime.now(montreal).replace(tzinfo=None)
+        now = datetime.now(timezone.utc)
 
         userId = current_user.id
         resultat = request.form["resultat"]        
@@ -151,10 +150,10 @@ def prediction_match(matchId):
         #add notification to say prediction added
         return redirect(url_for("ranking"))
     else:
+        montreal = pytz.timezone("America/Montreal")
         match = db.session.get(Match, matchId)
-        teamHome = db.session.get(Equipe, match.equipeHomeId)
-        teamAway = db.session.get(Equipe, match.equipeAwayId)
-        return render_template("prediction.html", match=match)
+        local = match.dateMatch.replace(tzinfo=timezone.utc).astimezone(montreal)
+        return render_template("prediction.html", match=match, date_match=local)
 
 @app.route('/ranking', methods=['GET', 'POST'])
 def ranking():
