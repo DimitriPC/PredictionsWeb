@@ -110,7 +110,7 @@ def register():
 @app.route('/prediction', methods=['GET', 'POST'])
 @login_required
 def prediction():
-    now = datetime.now(timezone.utc)
+    now = datetime.utcnow()
 
     to_do = Match.query.filter(
         Match.dateMatch > now,
@@ -134,7 +134,7 @@ def prediction():
 @login_required
 def prediction_match(matchId):
     if request.method == "POST":
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
 
         userId = current_user.id
         resultat = request.form["resultat"]        
