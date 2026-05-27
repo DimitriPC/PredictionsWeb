@@ -110,7 +110,7 @@ def register():
 @app.route('/prediction', methods=['GET', 'POST'])
 @login_required
 def prediction():
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     to_do = Match.query.filter(
         Match.dateMatch > now,
@@ -134,7 +134,7 @@ def prediction():
 @login_required
 def prediction_match(matchId):
     if request.method == "POST":
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         userId = current_user.id
         resultat = request.form["resultat"]        
@@ -256,3 +256,14 @@ def addGame():
 def logout():
     logout_user()
     return redirect(url_for("login"))
+
+@app.route('/debug')
+def debug():
+    from datetime import datetime
+    now = datetime.utcnow()
+    matches = Match.query.all()
+    result = ""
+    for m in matches:
+        result += f"{m.id} | {m.dateMatch} | past={m.dateMatch <= now}<br>"
+    result += f"<br>now: {now}"
+    return result
